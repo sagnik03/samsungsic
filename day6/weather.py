@@ -1,9 +1,9 @@
 import requests
 
 # Your OpenWeatherMap API key
-api_key = "09c7f50be3f4672ab55f5e19cd94e773" #'your_api_key'
+api_key = "f1b8301fcf16cbfef00ee1b6fc585451" #'your_api_key'
 # City for which you want the weather
-city = 'bishkek' #'London'
+city = 'nellore' #'London'
 
 # API endpoint
 url = f'http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric'

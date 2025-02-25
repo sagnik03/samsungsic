@@ -1,14 +1,14 @@
 import pymysql
 
-class Person:
-    def __init__(self, name="", gender="", dob="", location=""):
-        self.name       = name
-        self.gender     = gender
-        self.dob        = dob
-        self.location   = location
+class Flight:
+    def __init__(self, flight_number="", airline="", departure="", arrival=""):
+        self.flight_number  = flight_number
+        self.airline        = airline
+        self.departure      = departure
+        self.arrival        = arrival
 
     def __str__(self):
-        print(f'Name:{self.name}, Location:{self.location}')
+        print(f'flight_number:{self.flight_number}, airline:{self.airline}')
 
 class Db_operations:
     def __init__(self):
@@ -40,26 +40,26 @@ class Db_operations:
 
     def create_table(self):
         connection = self.connect_db()
-        query = "create table IF NOT EXISTS persons(id int primary key auto_increment, name varchar(32) not null, gender char check(gender in('m','M', 'f','F')), location varchar(32), dob date);"
+        query = "create table IF NOT EXISTS flights(id int primary key auto_increment, flight_number varchar(10) not null unique, airline varchar(50) not null, departure varchar(50) not null, arrival varchar(50) not null );"
         cursor = connection.cursor()
         cursor.execute(query)
         cursor.close()
         print('Table created')
         self.disconnect_db(connection)
 
-    def read_person_details(self):
-        name = input('Enter person name: ')
-        gender = input('Enter person gender: ')[0]
-        location = input('Enter person location: ')
-        dob = input('Enter person date of borth(yyyy-mm-dd): ')
-        return (name, gender, location, dob)
+    def read_flight_details(self):
+        flight_number= input('Enter flight number: ')
+        airline = input('Enter flight name: ')[0]
+        departure = input('Enter departure airport: ')
+        arrival= input('Enter arrival airport: ')
+        return (flight_number,airline, departure, arrival)
 
-    def insert_row(self, person):
-        query = 'insert into persons(name, gender, location, dob) values(%s, %s, %s, %s);'
-        person_tuple = (person.name, person.gender, person.location, person.dob)
+    def insert_row(self, flight):
+        query = 'insert into flights(flight_number, airline, departure, arrival) values(%s, %s, %s, %s);'
+        flight_tuple = (flight.flight_number, flight.airline, flight.departure, flight.arrival)
         connection = self.connect_db()
         cursor = connection.cursor()
-        cursor.execute(query, person_tuple)
+        cursor.execute(query, flight_tuple)
         connection.commit()
         cursor.close()
         self.disconnect_db(connection)
@@ -67,7 +67,7 @@ class Db_operations:
         return id
 
     def update_row(self, data):
-        query = f'update persons set name = %s, gender = %s, location = %s, dob = %s where id = %s'
+        query = f'update flights set flight_number = %s, airline = %s, departure = %s, arrival = %s where id = %s'
         connection = self.connect_db()
         cursor = connection.cursor()
         cursor.execute(query, data)
@@ -77,14 +77,14 @@ class Db_operations:
 
     def delete_row(self, id):
         #id = int(input('Enter Id of the person to delete: '))
-        query = f'delete from persons where id = {id}'
+        query = f'delete from flights where id = {id}'
         connection = self.connect_db()
         cursor = connection.cursor()
         count = cursor.execute(query)
         if count == 0:
-            print(f'Person with id = {id} not found')
+            print(f'Flight with id = {id} not found')
         else:
-            print(f'Person with id = {id} deleted')
+            print(f'Flight with id = {id} deleted')
         connection.commit()
         cursor.close()
         self.disconnect_db(connection)
@@ -92,22 +92,22 @@ class Db_operations:
     def search_row(self, id):
         row = None
         #id = int(input('Enter Id of the person to search: '))
-        query = f'select * from persons where id = {id}'
+        query = f'select * from flights where id = {id}'
         connection = self.connect_db()
         cursor = connection.cursor()
         count = cursor.execute(query)
         if count == 0:
-            print(f'Person with id = {id} not found')
+            print(f'Flight with id = {id} not found')
         else:
             row = cursor.fetchone()
-            print(f'Person details are \n', str(row))
+            print(f'Flight details are \n', str(row))
         connection.commit()
         cursor.close()
         self.disconnect_db(connection)
         return row
 
     def list_all_rows(self):
-        query = 'select * from persons;'
+        query = 'select * from flights;'
         try:
             connection = self.connect_db()
             cursor = connection.cursor()
@@ -125,7 +125,7 @@ class Db_operations:
             print('Error in reading rows')
 
     def get_latest_row_id(self):
-        query = 'select max(id) from persons;'
+        query = 'select max(id) from flights;'
         connection = self.connect_db()
         cursor = connection.cursor()
         cursor.execute(query)

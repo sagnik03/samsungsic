@@ -1,1 +1,2 @@
-# samsungsic
+# SIC
+It's samsung training
