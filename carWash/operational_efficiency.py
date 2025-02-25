@@ -2,11 +2,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Load the dataset
-file_path = "data.csv"
+file_path = "carWash/data.csv"
 df = pd.read_csv(file_path)
 
-# Convert 'Visit Date' to datetime
+
 df['Visit Date'] = pd.to_datetime(df['Visit Date'], dayfirst=True)
 
 # Employee Performance Analysis
@@ -42,7 +41,7 @@ plt.xlabel('Revenue')
 plt.ylabel('Water Consumption (liters)')
 plt.show()
 
-# Equipment Maintenance Analysis
+
 plt.figure(figsize=(10, 5))
 sns.histplot(df['Maintenance Frequency (weeks)'], bins=10, kde=True, color='blue')
 plt.title('Maintenance Frequency Distribution')
